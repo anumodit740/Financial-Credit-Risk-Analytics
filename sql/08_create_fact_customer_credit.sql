@@ -1,16 +1,25 @@
 -- ============================================================================
--- 07_create_fact_customer_credit.sql
+-- 08_create_fact_customer_credit.sql
 -- Fact Table: Customer Credit (Monthly Snapshot)
 -- Grain     : One row per Customer_ID per Month
 -- ============================================================================
 -- FACT TABLE RULES APPLIED:
 --   - Only foreign keys + numeric measures are included.
---   - Payment_of_Min_Amount and Credit_Score are the two exceptions, kept as
---     DEGENERATE DIMENSIONS directly in the fact table rather than separate
---     dimension tables. Both are 2-3 value flags (e.g. Yes/No/NM,
---     Poor/Standard/Good) - building a full dimension table + join for a
---     handful of fixed values adds a join with no analytical benefit. This
---     is standard Kimball practice for very low-cardinality flags.
+--   - Payment_of_Min_Amount is kept as a DEGENERATE DIMENSION directly in the
+--     fact table rather than a separate dimension table. It's a low-
+--     cardinality flag (Yes/No/NM) - building a full dimension table + join
+--     for a handful of fixed values adds a join with no analytical benefit.
+--     This is standard Kimball practice for very low-cardinality flags.
+--   - Credit_Score was originally dropped in the Power Query M code
+--     (Removed Columns11) and restored per user request. It was initially
+--     assumed to be numeric, but a live query against raw_financial_data
+--     confirmed it is actually CATEGORICAL ("Poor"/"Standard"/"Good", plus
+--     ~38% NULL, imputed to "Data Missing"). It is therefore modeled as a
+--     proper dimension (dim_credit_score, see 07_create_dim_credit_score.sql)
+--     with a foreign key here, exactly like Credit_Mix - NOT as a numeric
+--     measure and NOT as a degenerate dimension, since it deserves the same
+--     first-class treatment as Credit_Mix (likely the primary risk
+--     classification target for this project).
 --
 -- KEY DATA-TYPE FIX:
 --   Num_Credit_Inquiries is STRING in cleaned_financial_data (it can hold the
@@ -49,7 +58,7 @@ WITH source AS (
       ELSE 'Very High (9+)'
     END AS Loan_Tier,
 
-    -- Degenerate dimensions (kept directly in fact, see header note)
+    -- Degenerate dimension (Payment_of_Min_Amount) + join key for dim_credit_score
     Payment_of_Min_Amount,
     Credit_Score,
 
@@ -83,10 +92,10 @@ SELECT
   dcm.credit_mix_key,
   dpb.payment_behaviour_key,
   dl.loan_key,
+  dcs.credit_score_key,
 
-  -- Degenerate dimension flags
+  -- Degenerate dimension flag
   s.Payment_of_Min_Amount,
-  s.Credit_Score,
 
   -- Numeric measures
   s.Annual_Income,
@@ -117,4 +126,6 @@ LEFT JOIN `financial-dashboard-500409.financial_dashboard.dim_credit_mix` dcm
 LEFT JOIN `financial-dashboard-500409.financial_dashboard.dim_payment_behaviour` dpb
   ON s.Payment_Behaviour = dpb.Payment_Behaviour
 LEFT JOIN `financial-dashboard-500409.financial_dashboard.dim_loan` dl
-  ON s.Loan_Tier = dl.Loan_Tier;
+  ON s.Loan_Tier = dl.Loan_Tier
+LEFT JOIN `financial-dashboard-500409.financial_dashboard.dim_credit_score` dcs
+  ON s.Credit_Score = dcs.Credit_Score;

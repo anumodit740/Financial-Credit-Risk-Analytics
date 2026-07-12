@@ -1,9 +1,15 @@
 -- ============================================================================
--- 01_create_cleaned_financial_data.sql
+-- 00_create_cleaned_financial_data.sql
 -- Production BigQuery Standard SQL conversion of the Power Query (M) ETL logic
 -- Target Table : financial-dashboard-500409.financial_dashboard.cleaned_financial_data
 -- Source Table : financial-dashboard-500409.financial_dashboard.raw_financial_data
 -- No DML used (no UPDATE/DELETE/MERGE/INSERT/ALTER) - Sandbox-safe
+--
+-- DEVIATION FROM ORIGINAL POWER QUERY: the original M code drops Credit_Score
+-- via Table.RemoveColumns(...,{"Credit_Score"}). Per user confirmation this
+-- was not intended - Credit_Score genuinely exists in raw_financial_data and
+-- is needed for risk analysis, so it is intentionally KEPT here, passed
+-- through untouched (no cleaning logic was ever applied to it in the M code).
 -- ============================================================================
 
 CREATE OR REPLACE TABLE
@@ -68,7 +74,8 @@ base AS (
       WHEN Payment_Behaviour = '!@9#%8' THEN 'Missing Data'
       ELSE Payment_Behaviour
     END AS Payment_Behaviour,
-    Monthly_Balance
+    Monthly_Balance,
+    IFNULL(Credit_Score, 'Data Missing') AS Credit_Score
   FROM
     `financial-dashboard-500409.financial_dashboard.raw_financial_data`
 ),
@@ -197,7 +204,8 @@ final AS (
       2
     ) AS Amount_invested_monthly,
     Payment_Behaviour,
-    Monthly_Balance
+    Monthly_Balance,
+    Credit_Score
   FROM base
 )
 
