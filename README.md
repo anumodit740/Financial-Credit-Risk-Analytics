@@ -7,9 +7,9 @@
 ![Google BigQuery](https://img.shields.io/badge/Google%20BigQuery-Data%20Warehouse-red?style=flat-square)
 ![Power BI](https://img.shields.io/badge/Power%20BI-Business%20Intelligence-yellow?style=flat-square)
 
-**An end-to-End Automated Financial Reporting & Business Intelligence Solution** that simulates a real-world enterprise data pipeline using **Microsoft Outlook, Power Automate, Google Drive, Google BigQuery, and Power BI**
+**An end-to-End Automated Financial Reporting & Business Intelligence Solution** that simulates a real-world enterprise data pipeline using **Microsoft Outlook, Power Automate, Google Drive, Google BigQuery, and Power BI**.
 
-[Live Demo](#-dashboard-preview) • [Architecture](#-solution-architecture) • [Features](#-key-features) • [Getting Started](#-getting-started)
+[Live Demo (Power BI)](https://app.powerbi.com/groups/me/reports/feade1b7-637e-40bb-a4e0-32b5701f9470/tt01risksummary01?experience=power-bi) • [Dashboard Preview](#-dashboard-preview) • [Architecture](#-solution-architecture) • [Features](#-key-features) • [Getting Started](#-getting-started)
 
 </div>
 
@@ -17,7 +17,7 @@
 
 ## 🚀 Project Overview
 
-Traditional organizations receive financial reports periodically through emails from different departments, branches, or business units. Preparing reports manually is **time-consuming, error-prone, and inefficient**.
+Traditional organizations receive financial reports periodically through emails from different departments, branches, or business units. Preparing reports manually is **time-consuming, error-prone, and difficult to scale**.
 
 This project replicates **how modern enterprises automate their financial reporting pipeline**, eliminating manual data entry and enabling real-time analytics.
 
@@ -49,9 +49,9 @@ Organizations often face critical challenges:
 ## 🎯 Solution Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────────┐
+┌─────────────────────────────────────────────────────────────────
 │                    ENTERPRISE DATA PIPELINE                          │
-└─────────────────────────────────────────────────────────────────────┘
+└─────────────────────────────────────────────────────────────────
 
 Finance Department
         │
@@ -59,40 +59,40 @@ Finance Department
     📧 Monthly Financial Reports (Email Attachments)
         │
         ▼
-┌─────────────────────────────────────────────────────────────────┐
+┌─────────────────────────────────────────────────────────────────
 │           MICROSOFT OUTLOOK                                      │
 │  ✓ Monitor Inbox  ✓ Detect Email  ✓ Parse Attachments         │
-└──────────────────────────────────────────────────────────────���──┘
+└──────────────────────────────────────────────────────────────
         │
         ▼
-┌─────────────────────────────────────────────────────────────────┐
+┌─────────────────────────────────────────────────────────────────
 │        MICROSOFT POWER AUTOMATE (Cloud Workflow)                 │
 │  ✓ Email Detection ✓ File Extraction ✓ Automated Trigger       │
-└─────────────────────────────────────────────────────────────────┘
+└─────────────────────────────────────────────────────────────────
         │
         ▼
-┌─────────────────────────────────────────────────────────────────┐
+┌─────────────────────────────────────────────────────────────────
 │           GOOGLE DRIVE (Cloud Storage)                           │
 │  ✓ Centralized Repository ✓ Version Management ✓ Access Control│
-└─────────────────────────────────────────────────────────────────┘
+└─────────────────────────────────────────────────────────────────
         │
         ▼
-┌─────────────────────────────────────────────────────────────────┐
+┌─────────────────────────────────────────────────────────────────
 │        GOOGLE BIGQUERY (Data Warehouse)                          │
 │  ✓ Data Loading ✓ Validation ✓ Transformation ✓ Schema Mgmt    │
-└─────────────────────────────────────────────────────────────────┘
+└─────────────────────────────────────────────────────────────────
         │
         ▼
-┌─────────────────────────────────────────────────────────────────┐
+┌─────────────────────────────────────────────────────────────────
 │     POWER QUERY (ETL & Data Transformation)                      │
 │  ✓ Cleaning ✓ Deduplication ✓ Type Conversion ✓ Standardization│
-└─────────────────────────────────────────────────────────────────┘
+└─────────────────────────────────────────────────────────────────
         │
         ▼
-┌─────────────────────────────────────────────────────────────────┐
+┌─────────────────────────────────────────────────────────────────
 │       POWER BI (Analytics & Visualization)                       │
 │  ✓ Star Schema ✓ DAX Measures ✓ Interactive Reports            │
-└─────────────────────────────────────────────────────────────────┘
+└─────────────────────────────────────────────────────────────────
         │
         ▼
     📊 Executive Dashboard | KPI Cards | Trend Analysis
@@ -174,7 +174,6 @@ Designed an optimized **Star Schema** for efficient analytical queries:
          • Month         • Name         • Category
          • Quarter       • Segment      • Sub_Category
          • Year          • Region       • Price
-                
                 ▼
            Region Dim     Category Dim
          • Region_ID    • Cat_ID
@@ -273,8 +272,7 @@ Geographic performance metrics:
 
 ---
 
-### 📌 **Product Performance**
-Product-level insights:
+### 📌 **Product Performance**nProduct-level insights:
 - Top performing products
 - Category-wise analysis
 - Revenue distribution by product
@@ -391,14 +389,14 @@ Financial-Credit-Risk-Analytics/
 │   │   ├── 03_profitability_analysis.png
 │   │   ├── 04_regional_analysis.png
 │   │   ├── 05_product_performance.png
-│   │   └── 06_customer_insights.png
+│   │   │   └── 06_customer_insights.png
 │   ├── architecture/             # Architecture diagrams
 │   │   ├── data_pipeline.png
 │   │   ├── star_schema.png
 │   │   └── system_integration.png
 │   ├── workflows/                # Power Automate workflow visuals
 │   │   ├── email_automation.png
-│   │   └── flow_logic.png
+│   │   │   └── flow_logic.png
 │   └── README.md
 │
 ├── 📁 05_sql/
@@ -473,6 +471,8 @@ cd Financial-Credit-Risk-Analytics
 ---
 
 ## 📷 Dashboard Preview
+
+Live interactive report: [Open Live Dashboard in Power BI](https://app.powerbi.com/groups/me/reports/feade1b7-637e-40bb-a4e0-32b5701f9470/tt01risksummary01?experience=power-bi)
 
 ### Sample Dashboard Images
 
