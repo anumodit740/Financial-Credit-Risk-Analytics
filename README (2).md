@@ -521,7 +521,7 @@ export default function RiskKpi3DChart() {
 ## 📞 Contact
 
 - GitHub: [@anumodit740](https://github.com/anumodit740)
-- LinkedIn: [Anushka Modit](https://linkedin.com/in/anumodit740)
+- LinkedIn: [Anumodit](https://linkedin.com/in/anumodit740)
 - Live report: [Power BI — Risk Summary](https://app.powerbi.com/groups/me/reports/feade1b7-637e-40bb-a4e0-32b5701f9470/tt01risksummary01?experience=power-bi)
 
 <div align="center">
