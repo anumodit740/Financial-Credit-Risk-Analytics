@@ -20,7 +20,7 @@ An end-to-end data analytics project that automates credit-risk data ingestion, 
 
 <br>
 
-[**🔴 Live Power BI Report**](https://app.powerbi.com/groups/me/reports/feade1b7-637e-40bb-a4e0-32b5701f9470/tt01risksummary01?experience=power-bi)
+[**🔴 Live Power BI Report**](https://app.powerbi.com/groups/me/reports/feade1b7-637e-40bb-a4e0-32b5701f9470/01f4a5c8e7b64d2a9c10?experience=power-bi)
 •
 [Dashboard Gallery](#-dashboard-gallery)
 •
@@ -1172,7 +1172,7 @@ Please provide appropriate attribution if you reuse significant portions of the 
 - 🔗 GitHub: https://github.com/anumodit740
 - 💼 LinkedIn: https://linkedin.com/in/anumodit740
 - 📊 Live Power BI Report:
-  https://app.powerbi.com/groups/me/reports/feade1b7-637e-40bb-a4e0-32b5701f9470/tt01risksummary01?experience=power-bi
+  https://app.powerbi.com/groups/me/reports/feade1b7-637e-40bb-a4e0-32b5701f9470/01f4a5c8e7b64d2a9c10?experience=power-bi
 
 ---
 
