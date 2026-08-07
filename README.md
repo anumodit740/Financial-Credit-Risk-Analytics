@@ -1,340 +1,577 @@
 <div align="center">
 
 # 💳 Financial Credit Risk Analytics
-### Automated Consumer Credit-Risk Reporting Pipeline — Outlook ➜ Power Automate ➜ Drive ➜ BigQuery ➜ Power BI
 
-<em>An end-to-end credit-risk analytics platform: raw customer credit data is ingested automatically, cleaned and modeled into a 7‑dimension star schema in Google BigQuery, and served through an 11‑page Power BI report.</em>
+### Enterprise Credit Risk Analytics Platform
+### Outlook ➜ Power Automate ➜ Google Drive ➜ BigQuery ➜ Power BI
+
+<p align="center">
+An end-to-end data analytics project that automates credit-risk data ingestion, transforms raw financial records into a dimensional data warehouse, and delivers executive dashboards through Microsoft Power BI.
+</p>
+
+<br>
 
 ![GCP BigQuery](https://img.shields.io/badge/Google%20BigQuery-Data%20Warehouse-4285F4?style=for-the-badge&logo=googlecloud&logoColor=white)
 ![Power BI](https://img.shields.io/badge/Power%20BI-Dashboards-F2C811?style=for-the-badge&logo=powerbi&logoColor=black)
-![Power Automate](https://img.shields.io/badge/Power%20Automate-Ingestion-8A2BE2?style=for-the-badge&logo=powerautomate&logoColor=white)
-![Star Schema](https://img.shields.io/badge/Model-Star%20Schema-2E8B57?style=for-the-badge)
-![SQL](https://img.shields.io/badge/SQL-Standard%20SQL-CC2927?style=for-the-badge&logo=googlebigquery&logoColor=white)
+![Power Automate](https://img.shields.io/badge/Power%20Automate-Automation-8A2BE2?style=for-the-badge&logo=powerautomate&logoColor=white)
+![SQL](https://img.shields.io/badge/BigQuery-SQL-4285F4?style=for-the-badge&logo=googlebigquery&logoColor=white)
 ![Python](https://img.shields.io/badge/Python-EDA%20%26%20ETL-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Star Schema](https://img.shields.io/badge/Data%20Model-Star%20Schema-2E8B57?style=for-the-badge)
 
-[**🔴 Live Power BI Report**](https://app.powerbi.com/groups/me/reports/feade1b7-637e-40bb-a4e0-32b5701f9470/tt01risksummary01?experience=power-bi) · [Screenshots](#-dashboard-gallery) · [Architecture](#%EF%B8%8F-solution-architecture) · [Data Model](#-data-model-star-schema) · [Getting Started](#-getting-started)
+<br>
+
+[**🔴 Live Power BI Report**](https://app.powerbi.com/groups/me/reports/feade1b7-637e-40bb-a4e0-32b5701f9470/tt01risksummary01?experience=power-bi)
+•
+[Dashboard Gallery](#-dashboard-gallery)
+•
+[Architecture](#️-solution-architecture)
+•
+[Data Model](#-data-model-star-schema)
+•
+[Getting Started](#-getting-started)
 
 </div>
 
-<br/>
+---
 
-## 📌 Table of Contents
+# 📑 Table of Contents
 
-- [Overview](#-overview)
+- [Project Overview](#-project-overview)
+- [Project Highlights](#-project-highlights)
 - [Business Problem](#-business-problem)
-- [Solution Architecture](#%EF%B8%8F-solution-architecture)
+- [Solution Architecture](#️-solution-architecture)
 - [Data Model (Star Schema)](#-data-model-star-schema)
 - [Dashboard Gallery](#-dashboard-gallery)
-- [Key KPIs Tracked](#-key-kpis-tracked)
+- [Key Business KPIs](#-key-business-kpis)
 - [Repository Structure](#-repository-structure)
-- [Tech Stack](#-tech-stack)
+- [Technology Stack](#-technology-stack)
 - [Getting Started](#-getting-started)
-- [Data Quality & Known Limitations](#-data-quality--known-limitations-honest-take)
-- [Bonus: Embeddable Widgets (React / JS / 3D)](#-bonus-embeddable-widgets-react--js--3d)
+- [Data Quality & Limitations](#-data-quality--limitations)
 - [Roadmap](#-roadmap)
 - [Contact](#-contact)
 
 ---
 
-## 🚀 Overview
+# 🚀 Project Overview
 
-Banks and lenders traditionally receive customer financial/credit snapshots as periodic email attachments — manually downloaded, manually cleaned, and manually loaded into whatever tool is on hand. That's slow, inconsistent, and impossible to audit.
+Financial institutions often receive monthly customer credit reports through email attachments. Manually downloading, cleaning, transforming, and analyzing these files is repetitive, error-prone, and difficult to audit.
 
-This project builds a **fully automated pipeline** for a **consumer credit-risk dataset** (one row per `Customer_ID` per `Month`, ~26 behavioral/financial attributes per customer):
+This project demonstrates a complete analytics workflow that automates the entire reporting lifecycle—from email ingestion to executive dashboards—using modern data engineering and business intelligence tools.
 
-1. **Ingest** — a Power Automate flow watches an Outlook mailbox, extracts attachments, and drops them into Google Drive.
-2. **Load** — a Python/Colab notebook (`financial.ipynb`) authenticates against Google APIs and loads the raw files into a **Google BigQuery** staging table.
-3. **Clean & Model** — nine BigQuery Standard SQL scripts (`sql/00`–`sql/08`) clean the raw data and build a **7-dimension / 1-fact star schema**.
-4. **Analyze** — an automated EDA notebook (`notebooks/financial_eda.ipynb`) profiles the cleaned dataset with `ydata-profiling`, publishing an [interactive EDA report](docs/index.html).
-5. **Visualize** — an 11-page **Power BI** report (`powerbi/Financial_Dashboard_Project.pbix`) turns the model into an executive-ready credit-risk dashboard.
+The pipeline performs:
 
-> **GCP Project:** `financial-dashboard-500409` · **Dataset:** `financial_dashboard` · **Domain:** Consumer Banking / Personal Credit Risk
+1. **Automated Ingestion**
+   - Monitors Outlook mailbox
+   - Detects new attachments
+   - Triggers Power Automate
+   - Stores files in Google Drive
+
+2. **Data Loading**
+   - Python notebook authenticates using Google APIs
+   - Loads raw Excel files into Google BigQuery
+
+3. **Data Transformation**
+   - Cleans source data
+   - Creates dimensional warehouse
+   - Builds a 7-dimension Star Schema
+   - Generates analytical fact table
+
+4. **Exploratory Data Analysis**
+   - Automated profiling using `ydata-profiling`
+   - Generates HTML EDA report
+
+5. **Business Intelligence**
+   - Interactive Microsoft Power BI dashboard
+   - Executive KPIs
+   - Drill-through reports
+   - Tooltips
+   - Business insights
 
 ---
 
-## 🏢 Business Problem
+# ✨ Project Highlights
 
-| Challenge | Impact |
-|---|---|
-| Credit reports arrive as monthly email attachments | Manual downloading, high error rate |
-| No centralized, versioned raw-data store | Files scattered, hard to audit or reproduce |
-| Repetitive, inconsistent data cleaning | Unreliable downstream metrics |
-| No conformed dimensional model | Every report reinvents its own logic |
-| No single source of truth for credit-risk KPIs | Slow, siloed decision-making |
-
-**Solution:** automate ingestion end-to-end and expose a governed star schema as the single source of truth for credit-risk reporting.
+| Feature | Description |
+|----------|-------------|
+| 📧 Automated Data Ingestion | Outlook → Power Automate → Google Drive |
+| ☁ Cloud Data Warehouse | Google BigQuery |
+| ⭐ Data Warehouse Design | 7 Dimension + 1 Fact Star Schema |
+| 📊 Business Intelligence | 11 Interactive Power BI Pages |
+| 📈 Executive Reporting | 30+ Credit Risk KPIs |
+| 🧹 Data Cleaning | SQL Transformation Pipeline |
+| 🐍 Python Automation | Google API + EDA |
+| 📑 Automated Profiling | ydata-profiling |
+| ⚡ Interactive Analysis | Drill-through & Tooltips |
+| 📌 Executive Dashboard | Business-ready insights |
 
 ---
 
-## 🏗️ Solution Architecture
+# 🏢 Business Problem
+
+Financial institutions continuously receive customer credit reports through monthly email attachments.
+
+Traditional reporting workflows involve:
+
+| Challenge | Business Impact |
+|------------|-----------------|
+| Manual attachment download | Time-consuming and repetitive |
+| Scattered source files | Difficult to audit |
+| Inconsistent data cleaning | Unreliable KPIs |
+| Duplicate business logic | Multiple versions of truth |
+| Poor scalability | Increasing maintenance effort |
+
+### Proposed Solution
+
+Build an automated analytics pipeline that:
+
+- Eliminates manual ingestion
+- Standardizes data transformation
+- Creates a governed dimensional model
+- Produces reliable executive KPIs
+- Enables interactive business reporting
+
+---
+
+# 🏗️ Solution Architecture
 
 ```mermaid
 flowchart LR
-    A[📧 Outlook<br/>Mailbox] -->|new attachment| B[⚡ Power Automate<br/>Flow]
-    B -->|save file| C[☁️ Google Drive<br/>Raw Store]
-    C -->|load| D[(🗄️ BigQuery<br/>raw_financial_data)]
-    D -->|00_create_cleaned_financial_data.sql| E[(🧹 BigQuery<br/>cleaned_financial_data)]
-    E -->|01–07 dim scripts| F[(⭐ 7 Dimension Tables)]
-    E -->|08_create_fact_customer_credit.sql| G[(📊 fact_customer_credit)]
-    F --> G
-    G -->|Power Query| H[📈 Power BI<br/>11-page Report]
-    E -.->|ydata-profiling| I[📄 EDA Report<br/>docs/index.html]
 
-    style A fill:#0078D4,color:#fff
-    style B fill:#8A2BE2,color:#fff
-    style C fill:#0F9D58,color:#fff
-    style D fill:#4285F4,color:#fff
-    style E fill:#4285F4,color:#fff
-    style F fill:#F2A900,color:#000
-    style G fill:#F2A900,color:#000
-    style H fill:#F2C811,color:#000
-    style I fill:#607D8B,color:#fff
+A[📧 Outlook Mailbox]
+-->
+B[⚡ Power Automate]
+
+B
+-->
+C[☁ Google Drive]
+
+C
+-->
+D[(🗄 BigQuery Raw Table)]
+
+D
+-->
+E[(🧹 Cleaned Dataset)]
+
+E
+-->
+F[(⭐ Dimension Tables)]
+
+E
+-->
+G[(📊 Fact Table)]
+
+F
+-->
+G
+
+G
+-->
+H[📈 Power BI Dashboard]
+
+E
+-.-
+I[📄 Automated EDA Report]
+
+style A fill:#0078D4,color:#fff
+style B fill:#8A2BE2,color:#fff
+style C fill:#0F9D58,color:#fff
+style D fill:#4285F4,color:#fff
+style E fill:#4285F4,color:#fff
+style F fill:#F2A900,color:#000
+style G fill:#F2A900,color:#000
+style H fill:#F2C811,color:#000
+style I fill:#607D8B,color:#fff
 ```
 
-**No DML used anywhere** — every table is built with sandbox-safe `CREATE OR REPLACE TABLE ... AS SELECT`, so the whole model can be rebuilt from scratch with zero side effects.
+### Data Flow
+
+```
+Outlook
+     ↓
+Power Automate
+     ↓
+Google Drive
+     ↓
+Python Loader
+     ↓
+BigQuery
+     ↓
+SQL Transformations
+     ↓
+Star Schema
+     ↓
+Power BI
+```
 
 ---
 
-## 📐 Data Model (Star Schema)
+# 📐 Data Model (Star Schema)
 
-One fact table, **seven** conformed dimensions, zero snowflaking, surrogate keys generated via `ROW_NUMBER()`.
+The warehouse follows **Kimball dimensional modeling** principles using one centralized fact table connected to seven conformed dimensions.
+
+## Star Schema
 
 ```mermaid
 erDiagram
-    dim_customer ||--o{ fact_customer_credit : customer_key
-    dim_date ||--o{ fact_customer_credit : date_key
-    dim_occupation ||--o{ fact_customer_credit : occupation_key
-    dim_credit_mix ||--o{ fact_customer_credit : credit_mix_key
-    dim_payment_behaviour ||--o{ fact_customer_credit : payment_behaviour_key
-    dim_loan ||--o{ fact_customer_credit : loan_key
-    dim_credit_score ||--o{ fact_customer_credit : credit_score_key
 
-    dim_customer {
-        int customer_key PK
-        string Customer_ID
-        string Name
-        string SSN
-        int Age
-    }
-    dim_date {
-        int date_key PK
-        string Month
-        int Month_Number
-        int Quarter
-    }
-    dim_occupation {
-        int occupation_key PK
-        string Occupation
-    }
-    dim_credit_mix {
-        int credit_mix_key PK
-        string Credit_Mix
-        int Credit_Mix_Sort
-    }
-    dim_payment_behaviour {
-        int payment_behaviour_key PK
-        string Payment_Behaviour
-    }
-    dim_loan {
-        int loan_key PK
-        string Loan_Tier
-        int Loan_Tier_Sort
-    }
-    dim_credit_score {
-        int credit_score_key PK
-        string Credit_Score
-        int Credit_Score_Sort
-    }
-    fact_customer_credit {
-        int customer_credit_key PK
-        int customer_key FK
-        int date_key FK
-        int occupation_key FK
-        int credit_mix_key FK
-        int payment_behaviour_key FK
-        int loan_key FK
-        int credit_score_key FK
-        float Annual_Income
-        float Outstanding_Debt
-        float Credit_Utilization_Ratio
-        int Delay_from_due_date
-        int Num_Credit_Inquiries
-        float Total_EMI_per_month
-        float Monthly_Balance
-    }
+dim_customer ||--o{ fact_customer_credit : customer_key
+dim_date ||--o{ fact_customer_credit : date_key
+dim_occupation ||--o{ fact_customer_credit : occupation_key
+dim_credit_mix ||--o{ fact_customer_credit : credit_mix_key
+dim_payment_behaviour ||--o{ fact_customer_credit : payment_behaviour_key
+dim_loan ||--o{ fact_customer_credit : loan_key
+dim_credit_score ||--o{ fact_customer_credit : credit_score_key
 ```
 
-**Star schema health check** (from the project's own technical audit):
+### Warehouse Design
 
-| Practice | Status |
-|---|---|
-| Single fact table, conformed dimensions | ✅ |
-| Surrogate keys throughout | ✅ |
-| No snowflaking | ✅ |
-| Narrow fact table | ✅ |
-| True calendar `dim_date` (with Year) | ⚠️ Month/Quarter only — source data has no Year field |
-| Loan-type dimension | ⚠️ `dim_loan` is a volume-tier proxy — `Type_of_Loan` was dropped upstream |
+| Component | Count |
+|-----------|------:|
+| Fact Tables | 1 |
+| Dimension Tables | 7 |
+| Surrogate Keys | ✓ |
+| Snowflake Schema | ✗ |
+| Star Schema | ✓ |
+| Slowly Changing Dimensions | Static |
+| Analytical Model | Dimensional |
+
+### Dimension Tables
+
+- dim_customer
+- dim_date
+- dim_occupation
+- dim_credit_mix
+- dim_payment_behaviour
+- dim_loan
+- dim_credit_score
+
+### Fact Table
+
+**fact_customer_credit**
+
+Stores analytical measures including:
+
+- Annual Income
+- Outstanding Debt
+- Monthly Balance
+- EMI
+- Credit Utilization
+- Delay from Due Date
+- Credit Inquiries
+
+---
+# 🖼️ Dashboard Gallery
+
+The Power BI report is designed for executive decision-making and consists of **11 interactive report pages**, including drill-through analysis, custom tooltip pages, and Power Query transformation views.
+
+## 📊 Dashboard Overview
+
+| Dashboard | Description |
+|-----------|-------------|
+| 🏠 Home | Overall portfolio summary and navigation |
+| 📈 Executive Summary | Business KPIs and executive insights |
+| 👥 Customer Analysis | Customer demographics and segmentation |
+| 💳 Credit Analysis | Credit score and credit mix analysis |
+| 💰 Payment Analysis | Payment behaviour and due-date trends |
+| ❤️ Financial Health | Income, debt, utilization and EMI analysis |
+| 💡 Business Insights | Key analytical observations |
+| 🎯 Risk Summary | Interactive tooltip page |
+| 🔍 Credit Mix Details | Drill-through report |
+| 👔 Occupation Details | Drill-through report |
+| ⚙️ Power Query | ETL and transformation steps |
 
 ---
 
-## 🖼️ Dashboard Gallery
+## 🏠 Home Dashboard
 
-The Power BI report ships with drillthrough pages and a tooltip page, built on top of the star schema above.
-
-<table>
-<tr>
-<td width="50%">
-
-**Home**
 <img src="powerbi/screenshots/Home.png" width="100%"/>
 
-</td>
-<td width="50%">
+**Purpose**
 
-**Executive Summary**
+- Executive landing page
+- Navigation hub
+- Portfolio snapshot
+- Quick KPI overview
+
+---
+
+## 📈 Executive Summary
+
 <img src="powerbi/screenshots/Executive.png" width="100%"/>
 
-</td>
-</tr>
-<tr>
-<td width="50%">
+### Key Insights
 
-**Customer**
+- Portfolio Health
+- Credit Distribution
+- Outstanding Debt
+- Customer Risk
+- Credit Utilization
+- Executive KPIs
+
+---
+
+## 👥 Customer Analytics
+
 <img src="powerbi/screenshots/Customer.png" width="100%"/>
 
-</td>
-<td width="50%">
+### Analysis Includes
 
-**Credits**
+- Customer demographics
+- Occupation distribution
+- Income analysis
+- Customer segmentation
+- Credit behaviour
+
+---
+
+## 💳 Credit Analysis
+
 <img src="powerbi/screenshots/Credits.png" width="100%"/>
 
-</td>
-</tr>
-<tr>
-<td width="50%">
+### Analysis Includes
 
-**Payments**
+- Credit Score
+- Credit Mix
+- Credit Utilization
+- Loan Categories
+- Credit Risk Distribution
+
+---
+
+## 💰 Payment Behaviour
+
 <img src="powerbi/screenshots/Payments.png" width="100%"/>
 
-</td>
-<td width="50%">
+### Analysis Includes
 
-**Financial Health**
+- Payment delays
+- Monthly balances
+- EMI trends
+- Payment behaviour
+- Outstanding debt
+
+---
+
+## ❤️ Financial Health Dashboard
+
 <img src="powerbi/screenshots/Financial_health.png" width="100%"/>
 
-</td>
-</tr>
-<tr>
-<td width="50%">
+### Analysis Includes
 
-**Insights**
+- Annual Income
+- Debt Analysis
+- Credit Utilization
+- EMI Burden
+- Financial Stability
+
+---
+
+## 💡 Business Insights
+
 <img src="powerbi/screenshots/Insights.png" width="100%"/>
 
-</td>
-<td width="50%">
+Provides executive-level insights for:
 
-**Risk Summary (Tooltip Page)**
+- Portfolio risk
+- High-risk customers
+- Credit quality
+- Business trends
+- Decision support
+
+---
+
+# 🎯 Interactive Pages
+
+## Risk Summary Tooltip
+
 <img src="powerbi/screenshots/Risk%20summary%20tooltip%20page.png" width="100%"/>
 
-</td>
-</tr>
-<tr>
-<td width="50%">
+Custom tooltip page providing contextual information without leaving the current report.
 
-**Credit Mix Details (Drillthrough)**
+---
+
+## Credit Mix Drill-through
+
 <img src="powerbi/screenshots/Credit_mix_details%28drill%20through%20page%29.png" width="100%"/>
 
-</td>
-<td width="50%">
+Allows users to drill into individual Credit Mix categories for deeper analysis.
 
-**Occupation Details (Drillthrough)**
+---
+
+## Occupation Drill-through
+
 <img src="powerbi/screenshots/Occupation_details%28drill%20through%20page%29.png" width="100%"/>
 
-</td>
-</tr>
-</table>
+Provides occupation-wise customer behaviour and financial performance.
 
-<details>
-<summary><strong>ETL / Power Query screenshots</strong></summary>
-<br/>
+---
 
-| Power Query — Step 1 | Power Query — Step 2 |
-|---|---|
+# ⚙️ Power Query (ETL)
+
+| Step 1 | Step 2 |
+|---------|---------|
 | <img src="powerbi/screenshots/Power_query_1.png" width="100%"/> | <img src="powerbi/screenshots/Power_query_2.png" width="100%"/> |
 
-</details>
+Power Query is used to
 
-<details>
-<summary><strong>Ingestion automation screenshots (Outlook → Power Automate → Drive)</strong></summary>
-<br/>
+- Clean raw data
+- Transform attributes
+- Standardize formats
+- Prepare analytical tables
+- Build reporting model
 
-| Outlook Automation | Power Automate Flow | Google Drive Store |
-|---|---|---|
+---
+
+# 🔄 Data Ingestion Automation
+
+The entire ingestion process is automated using Microsoft technologies.
+
+| Outlook | Power Automate | Google Drive |
+|---------|----------------|--------------|
 | <img src="docs/screenshots/Outlook_automation.png" width="100%"/> | <img src="docs/screenshots/Power_Automate_Flow.png" width="100%"/> | <img src="docs/screenshots/gdrive.png" width="100%"/> |
 
-Additional flow detail: [`Power_automate_flow (2).png`](docs/screenshots/Power_automate_flow%20%282%29.png)
+Additional workflow details
 
-</details>
-
-> 📄 A full automated **EDA report** (generated with `ydata-profiling`) is available at [`docs/index.html`](docs/index.html).
-
----
-
-## 📊 Key KPIs Tracked
-
-Pulled straight from the project's own KPI inventory (`sql/financial_dashboard_business_analytics.md`) — these are the metrics an executive/risk team would actually watch:
-
-```mermaid
-xychart-beta
-    title "Illustrative Risk KPI Snapshot (sample values — see live report for real figures)"
-    x-axis ["Bad Credit Mix %", "High Utilization %", "Min-Payment-Only %", "High Inquiry %", "Very High Loan Tier %"]
-    y-axis "Share of Customers (%)" 0 --> 50
-    bar [18, 27, 22, 15, 12]
+```
+docs/screenshots/Power_automate_flow (2).png
 ```
 
-| # | KPI | Business Meaning |
-|---|---|---|
-| 1 | **Total Outstanding Debt Exposure** | Total credit risk carried across the portfolio |
-| 2 | **Average Credit Utilization Ratio** | How aggressively customers use available credit |
-| 3 | **% Customers in "Bad" Credit Mix** | Share of the portfolio in the worst credit-quality bucket |
-| 4 | **Average Delay from Due Date** | Typical lateness in payments |
-| 5 | **% Minimum-Payment-Only Customers** | Early-warning indicator of financial distress |
-| 6 | **Debt-to-Income Ratio** | Core underwriting risk metric |
-| 7 | **Loan Tier Distribution** | Portfolio composition by loan-volume risk bucket |
-| 8 | **Average Credit Inquiries** | Credit-seeking / distress signal |
-| 9 | **EMI Burden Ratio** | Share of income consumed by loan repayments |
-| 10 | **Credit Health Index (composite)** | Blended score across utilization, mix, and inquiries |
+---
 
-Full list of 30+ KPIs, 20 ranked executive questions, and dimension-by-dimension analysis: [`sql/financial_dashboard_business_analytics.md`](sql/financial_dashboard_business_analytics.md).
+# 📄 Automated Exploratory Data Analysis
+
+The project also includes an automated **EDA Report** generated using **ydata-profiling**.
+
+```
+docs/index.html
+```
+
+The report includes
+
+- Missing Values
+- Data Types
+- Distribution Analysis
+- Correlation Analysis
+- Duplicate Detection
+- Statistical Summary
+- Feature Relationships
 
 ---
 
-## 📂 Repository Structure
+# 📈 Dashboard Features
+
+| Feature | Status |
+|----------|:------:|
+| Executive Dashboard | ✅ |
+| Interactive Navigation | ✅ |
+| Drill Through | ✅ |
+| Custom Tooltips | ✅ |
+| Dynamic Filtering | ✅ |
+| Power Query ETL | ✅ |
+| Star Schema | ✅ |
+| DAX Measures | ✅ |
+| KPI Cards | ✅ |
+| Conditional Formatting | ✅ |
+| Slicers | ✅ |
+| Cross Filtering | ✅ |
+| Bookmarks | ✅ |
+| Responsive Layout | ✅ |
+
+---
+
+# 📊 Key Business KPIs
+
+The dashboard tracks more than **30 business KPIs** across customer credit performance, financial health, and portfolio risk.
+
+## Executive KPIs
+
+| KPI | Business Purpose |
+|-----|------------------|
+| Total Customers | Portfolio Size |
+| Total Outstanding Debt | Credit Exposure |
+| Average Annual Income | Customer Income Level |
+| Monthly Balance | Financial Health |
+| Credit Utilization Ratio | Credit Usage |
+| Average EMI | Debt Burden |
+| Average Credit Inquiries | Risk Indicator |
+| Average Payment Delay | Payment Behaviour |
+| High Risk Customers | Portfolio Monitoring |
+| Good Credit Score % | Portfolio Quality |
+
+---
+
+## Risk Monitoring KPIs
+
+- Debt-to-Income Ratio
+- High Utilization Customers
+- Minimum Payment Customers
+- Credit Mix Distribution
+- Loan Tier Distribution
+- Credit Score Distribution
+- Financial Stress Index
+- Portfolio Risk Score
+- Average Outstanding Debt
+- Monthly Payment Burden
+
+---
+
+# ⭐ Business Questions Answered
+
+The dashboard helps answer business questions such as:
+
+- Which customers are financially stressed?
+- Which occupations have the highest risk?
+- Which credit mix performs best?
+- How does payment behaviour impact credit score?
+- Which customer segments generate the highest credit exposure?
+- Which loan tier contributes most to outstanding debt?
+- What factors drive poor credit scores?
+- How healthy is the overall customer portfolio?
+
+---
+
+# 📂 Repository Structure
 
 ```text
-Financial-Credit-Risk-Analytics/
+Financial-Credit-Risk-Analytics
 │
-├── data/
-│   ├── data_dictionary.md            # Column-level documentation
-│   └── raw/                          # 25 raw source files (combined_part_1.xlsx … 25.xlsx)
+├── data
+│   ├── raw
+│   │   ├── combined_part_1.xlsx
+│   │   ├── ...
+│   │   └── combined_part_25.xlsx
+│   └── data_dictionary.md
 │
-├── docs/
-│   ├── index.html                    # Automated EDA report (ydata-profiling)
-│   ├── business_insights.md          # Reserved for narrative business insights
-│   └── screenshots/                  # Ingestion pipeline screenshots
+├── docs
+│   ├── index.html
+│   ├── business_insights.md
+│   └── screenshots
 │       ├── Outlook_automation.png
 │       ├── Power_Automate_Flow.png
 │       ├── Power_automate_flow (2).png
 │       └── gdrive.png
 │
-├── notebooks/
-│   └── financial_eda.ipynb           # Generates the ydata-profiling EDA report
+├── notebooks
+│   └── financial_eda.ipynb
 │
-├── powerbi/
+├── powerbi
 │   ├── Financial_Dashboard_Project.pbix
-│   └── screenshots/                  # 11 dashboard/report screenshots
+│   └── screenshots
+│       ├── Home.png
+│       ├── Executive.png
+│       ├── Customer.png
+│       ├── Credits.png
+│       ├── Payments.png
+│       ├── Financial_health.png
+│       ├── Insights.png
+│       ├── Risk summary tooltip page.png
+│       ├── Credit_mix_details(drill through page).png
+│       ├── Occupation_details(drill through page).png
+│       ├── Power_query_1.png
+│       └── Power_query_2.png
 │
-├── sql/
+├── sql
 │   ├── 00_create_cleaned_financial_data.sql
 │   ├── 01_create_dim_customer.sql
 │   ├── 02_create_dim_date.sql
@@ -344,190 +581,642 @@ Financial-Credit-Risk-Analytics/
 │   ├── 06_create_dim_loan.sql
 │   ├── 07_create_dim_credit_score.sql
 │   ├── 08_create_fact_customer_credit.sql
-│   ├── financial_dashboard_technical_summary.md   # Full technical audit (16 sections)
-│   └── financial_dashboard_business_analytics.md  # Full business/KPI audit (11 sections)
+│   ├── financial_dashboard_technical_summary.md
+│   └── financial_dashboard_business_analytics.md
 │
-├── financial.ipynb                   # Colab notebook: Drive → BigQuery loader
+├── financial.ipynb
 └── README.md
 ```
 
 ---
 
-## 🧰 Tech Stack
+# 📁 Visual Assets
 
-| Layer | Tool |
-|---|---|
-| Email ingestion | Microsoft Outlook |
-| Workflow automation | Microsoft Power Automate |
-| Raw file storage | Google Drive |
-| Data warehouse | Google BigQuery (Standard SQL, sandbox mode — no DML) |
-| ETL / transformation | BigQuery SQL (`sql/00`–`sql/08`) |
-| EDA | Python, pandas, `ydata-profiling` |
-| Data loading | Python (Google API client, Colab) |
-| BI / Visualization | Power BI Desktop, Power Query, DAX |
+```text
+Dashboard Screenshots
+│
+├── 🏠 Home
+├── 📈 Executive Summary
+├── 👥 Customer Analysis
+├── 💳 Credit Analysis
+├── 💰 Payment Analysis
+├── ❤️ Financial Health
+├── 💡 Business Insights
+├── 🎯 Risk Summary Tooltip
+├── 🔍 Credit Mix Drill-through
+├── 👔 Occupation Drill-through
+├── ⚙️ Power Query Step 1
+└── ⚙️ Power Query Step 2
+```
+
+---# 🛠️ Technology Stack
+
+This project combines **data engineering**, **cloud analytics**, **business intelligence**, and **automation** technologies to build an end-to-end credit risk analytics platform.
 
 ---
 
-## ⚙️ Getting Started
+## 📊 Technology Overview
 
-### Prerequisites
-- Google Cloud account with BigQuery enabled
-- Microsoft 365 account (Outlook + Power Automate) — only needed if you want to rebuild the ingestion flow
+| Layer | Technology | Purpose |
+|---------|------------|---------|
+| Data Source | Excel Files | Monthly customer credit reports |
+| Email Service | Microsoft Outlook | Incoming attachment monitoring |
+| Workflow Automation | Microsoft Power Automate | Automatic ingestion |
+| Cloud Storage | Google Drive | Raw data storage |
+| Programming Language | Python | Data loading & automation |
+| APIs | Google Drive API | Cloud integration |
+| Notebook Environment | Google Colab | ETL execution |
+| Data Warehouse | Google BigQuery | Cloud analytical database |
+| SQL Engine | BigQuery Standard SQL | Data transformation |
+| Data Modeling | Star Schema | Analytical warehouse |
+| ETL | SQL + Power Query | Data transformation |
+| EDA | pandas + ydata-profiling | Data profiling |
+| Business Intelligence | Microsoft Power BI | Dashboard development |
+| Data Preparation | Power Query | Cleaning & shaping |
+| Analytics Language | DAX | KPI calculations |
+| Version Control | Git & GitHub | Source code management |
+
+---
+
+# ⚡ Project Workflow
+
+```text
+Monthly Credit Files
+          │
+          ▼
+Microsoft Outlook
+          │
+          ▼
+Power Automate Flow
+          │
+          ▼
+Google Drive
+          │
+          ▼
+Python ETL Loader
+          │
+          ▼
+Google BigQuery
+          │
+          ▼
+Data Cleaning
+          │
+          ▼
+Star Schema
+          │
+          ▼
+Power BI Dashboard
+```
+
+---
+
+# 🏗️ Data Warehouse Layers
+
+The warehouse follows a simplified analytical architecture.
+
+## 🟦 Raw Layer
+
+Purpose
+
+- Store original files
+- Preserve source data
+- Maintain auditability
+
+Output
+
+```
+raw_financial_data
+```
+
+---
+
+## 🟨 Clean Layer
+
+Purpose
+
+- Remove invalid values
+- Handle missing data
+- Standardize formats
+- Improve consistency
+
+Output
+
+```
+cleaned_financial_data
+```
+
+---
+
+## 🟩 Dimensional Layer
+
+Creates analytical dimensions.
+
+Dimensions include
+
+- dim_customer
+- dim_date
+- dim_credit_mix
+- dim_payment_behaviour
+- dim_credit_score
+- dim_occupation
+- dim_loan
+
+---
+
+## 🟥 Fact Layer
+
+```
+fact_customer_credit
+```
+
+Stores analytical measures including
+
+- Income
+- Debt
+- Monthly Balance
+- EMI
+- Credit Utilization
+- Credit Inquiries
+- Payment Delay
+
+---
+
+# 📂 SQL Pipeline
+
+Execute SQL scripts in the following order.
+
+| Order | Script |
+|--------|--------|
+| 00 | create_cleaned_financial_data.sql |
+| 01 | create_dim_customer.sql |
+| 02 | create_dim_date.sql |
+| 03 | create_dim_occupation.sql |
+| 04 | create_dim_credit_mix.sql |
+| 05 | create_dim_payment_behaviour.sql |
+| 06 | create_dim_loan.sql |
+| 07 | create_dim_credit_score.sql |
+| 08 | create_fact_customer_credit.sql |
+
+---
+
+# 🚀 Getting Started
+
+## Prerequisites
+
+Install or create access to the following.
+
+### Cloud
+
+- Google Cloud Platform
+- BigQuery
+- Google Drive
+
+### Microsoft
+
+- Outlook
+- Power Automate
 - Power BI Desktop
-- Python 3.9+ (for the notebooks)
 
-### Rebuild the model
+### Python
+
+- Python 3.9+
+- pandas
+- numpy
+- google-api-python-client
+- ydata-profiling
+
+---
+
+# 📥 Clone Repository
 
 ```bash
 git clone https://github.com/anumodit740/Financial-Credit-Risk-Analytics.git
+
 cd Financial-Credit-Risk-Analytics
 ```
 
-1. Create a BigQuery dataset named `financial_dashboard` in your GCP project.
-2. Load the raw files from `data/raw/` into a `raw_financial_data` table.
-3. Run the SQL scripts **in numeric order** — each is a sandbox-safe `CREATE OR REPLACE TABLE`:
-
-   ```bash
-   # from the BigQuery console or bq CLI, run in this exact order:
-   sql/00_create_cleaned_financial_data.sql
-   sql/01_create_dim_customer.sql
-   sql/02_create_dim_date.sql
-   sql/03_create_dim_occupation.sql
-   sql/04_create_dim_credit_mix.sql
-   sql/05_create_dim_payment_behaviour.sql
-   sql/06_create_dim_loan.sql
-   sql/07_create_dim_credit_score.sql
-   sql/08_create_fact_customer_credit.sql
-   ```
-4. Open `powerbi/Financial_Dashboard_Project.pbix` in Power BI Desktop and point it at your BigQuery project.
-5. (Optional) Run `notebooks/financial_eda.ipynb` to regenerate the EDA report at `docs/index.html`.
-
 ---
 
-## ⚠️ Data Quality & Known Limitations (honest take)
+# ☁️ BigQuery Setup
 
-This section exists because the project's own technical audit is unusually candid about it — and that honesty is worth keeping front and center rather than only in `sql/financial_dashboard_technical_summary.md`.
+Create a dataset.
 
-- **No `Year` field** — the source data only has month names, so YoY, rolling-12-month, and forecasting are not supported.
-- **No geography or product data** — this is a pure customer/credit-risk dataset; there are no maps and no product-level analysis.
-- **`dim_loan` is a volume-tier proxy** — `Type_of_Loan` was dropped upstream, so it's loan *volume*, not loan *type*.
-- **`Credit_Score` is categorical** (`Poor` / `Standard` / `Good` / `Data Missing`, ~38% originally null), not a continuous bureau score.
-- Several row/null/duplicate counts require a **live query** to state precisely — see the "Requires live query" markers throughout `sql/financial_dashboard_technical_summary.md`.
-
-**Enterprise BI maturity self-score: 7 / 10** — strong star-schema fundamentals and a rich risk-signal set, held back by the missing calendar dimension and the lack of an incremental (vs. full-rebuild) load pattern.
-
----
-
-## 🎁 Bonus: Embeddable Widgets (React / JS / 3D)
-
-The Power BI report above is the primary deliverable, but here's starter code for embedding a lightweight, standalone KPI widget on a portfolio site or internal wiki — pulling the same shape of metrics as the dashboard.
-
-### React + Recharts — Risk KPI Bar Chart
-
-```jsx
-import React from "react";
-import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-} from "recharts";
-
-// Replace with a live fetch to your BigQuery-backed API in production
-const riskKpiData = [
-  { segment: "Bad Credit Mix", value: 18 },
-  { segment: "High Utilization", value: 27 },
-  { segment: "Min-Payment Only", value: 22 },
-  { segment: "High Inquiries", value: 15 },
-  { segment: "Very High Loan Tier", value: 12 },
-];
-
-export default function RiskKpiChart() {
-  return (
-    <ResponsiveContainer width="100%" height={320}>
-      <BarChart data={riskKpiData} margin={{ top: 16, right: 24, left: 0, bottom: 24 }}>
-        <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
-        <XAxis dataKey="segment" tick={{ fontSize: 12 }} interval={0} angle={-15} textAnchor="end" />
-        <YAxis unit="%" />
-        <Tooltip formatter={(v) => [`${v}%`, "Share of customers"]} />
-        <Bar dataKey="value" radius={[6, 6, 0, 0]} fill="#F2A900" />
-      </BarChart>
-    </ResponsiveContainer>
-  );
-}
+```
+financial_dashboard
 ```
 
-### Three.js — 3D Bar Chart (for a portfolio site, not GitHub-renderable)
+Import all raw Excel files into
 
-GitHub markdown can't execute JavaScript, so this is provided as ready-to-drop-in code for your personal site (e.g. inside a `react-three-fiber` `<Canvas>`), rendering the same risk segments as extruded 3D bars:
-
-```jsx
-import React from "react";
-import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Text } from "@react-three/drei";
-
-const riskKpiData = [
-  { segment: "Bad Mix", value: 18 },
-  { segment: "High Util.", value: 27 },
-  { segment: "Min Pay", value: 22 },
-  { segment: "High Inq.", value: 15 },
-  { segment: "Very High Loan", value: 12 },
-];
-
-function Bar3D({ position, height, label }) {
-  return (
-    <group position={position}>
-      <mesh position={[0, height / 2, 0]}>
-        <boxGeometry args={[0.8, height, 0.8]} />
-        <meshStandardMaterial color="#F2A900" />
-      </mesh>
-      <Text position={[0, -0.4, 0]} fontSize={0.22} color="#333" anchorX="center">
-        {label}
-      </Text>
-    </group>
-  );
-}
-
-export default function RiskKpi3DChart() {
-  return (
-    <Canvas camera={{ position: [6, 6, 8], fov: 45 }} style={{ height: 400 }}>
-      <ambientLight intensity={0.6} />
-      <directionalLight position={[5, 8, 5]} intensity={0.8} />
-      {riskKpiData.map((d, i) => (
-        <Bar3D
-          key={d.segment}
-          position={[i * 1.4 - (riskKpiData.length * 1.4) / 2, 0, 0]}
-          height={d.value / 5}
-          label={d.segment}
-        />
-      ))}
-      <OrbitControls enablePan={false} />
-    </Canvas>
-  );
-}
+```
+raw_financial_data
 ```
 
-> Both snippets are illustrative starter code, not part of the BigQuery/Power BI pipeline itself — swap `riskKpiData` for a live call to your own API layer if you wire one up.
+---
+
+# ⚙️ Execute SQL Pipeline
+
+Run every SQL script sequentially.
+
+```text
+00_create_cleaned_financial_data.sql
+
+01_create_dim_customer.sql
+
+02_create_dim_date.sql
+
+03_create_dim_occupation.sql
+
+04_create_dim_credit_mix.sql
+
+05_create_dim_payment_behaviour.sql
+
+06_create_dim_loan.sql
+
+07_create_dim_credit_score.sql
+
+08_create_fact_customer_credit.sql
+```
+
+After execution the warehouse will contain
+
+```
+7 Dimension Tables
+
+1 Fact Table
+```
 
 ---
 
-## 🔮 Roadmap
+# 📊 Open Power BI
 
-- [ ] Add a true calendar `dim_date` (requires a `Year` field in the source data)
-- [ ] Move from full `CREATE OR REPLACE TABLE` rebuilds to incremental `MERGE`-based loads
-- [ ] Build the field-parameter "measure switcher" and composite Credit Health Index outlined in `sql/financial_dashboard_business_analytics.md`
-- [ ] Row-Level Security (RLS) on the Power BI report
-- [ ] CI check that runs the SQL scripts 00→08 against a scratch dataset on every PR
+Open
+
+```
+powerbi/
+    Financial_Dashboard_Project.pbix
+```
+
+Update the BigQuery connection.
+
+Refresh the dataset.
+
+Explore the dashboard.
 
 ---
 
-## 📞 Contact
+# 📄 Generate EDA Report
 
-- GitHub: [@anumodit740](https://github.com/anumodit740)
-- LinkedIn: [Anumodit](https://linkedin.com/in/anumodit740)
-- Live report: [Power BI — Risk Summary](https://app.powerbi.com/groups/me/reports/feade1b7-637e-40bb-a4e0-32b5701f9470/tt01risksummary01?experience=power-bi)
+Run
+
+```
+financial.ipynb
+```
+
+or
+
+```
+notebooks/
+    financial_eda.ipynb
+```
+
+Generated output
+
+```
+docs/
+    index.html
+```
+
+---
+
+# 📈 Project Statistics
+
+| Metric | Value |
+|---------|------:|
+| Source Files | 25 |
+| Fact Tables | 1 |
+| Dimension Tables | 7 |
+| SQL Scripts | 9 |
+| Dashboard Pages | 11 |
+| Business KPIs | 30+ |
+| Drill-through Pages | 2 |
+| Tooltip Pages | 1 |
+| Power Query Screens | 2 |
+| Automated Pipeline | Yes |
+| Cloud Warehouse | Google BigQuery |
+
+---
+
+# 🔒 Data Quality & Validation
+
+Several validation checks are performed during transformation.
+
+✅ Missing Value Handling
+
+✅ Data Type Standardization
+
+✅ Duplicate Detection
+
+✅ Null Replacement
+
+✅ Credit Score Cleaning
+
+✅ Income Validation
+
+✅ Payment Behaviour Cleaning
+
+✅ Loan Tier Categorization
+
+✅ Schema Validation
+
+---
+
+# ⚠️ Known Limitations
+
+Although the project demonstrates a production-style analytics workflow, several limitations originate from the source dataset.
+
+| Limitation | Impact |
+|------------|--------|
+| No Year column | No YoY or time-series forecasting |
+| No Geographic Data | No map visualizations |
+| Loan Type unavailable | Loan Tier used instead |
+| Static dataset | No incremental loading |
+| Categorical Credit Score | No bureau score prediction |
+
+---
+
+# 💡 Future Improvements
+
+Potential enhancements include
+
+- Incremental ETL pipeline
+- Scheduled BigQuery refresh
+- Partitioned tables
+- Clustered tables
+- Row-Level Security (RLS)
+- CI/CD deployment
+- Data quality monitoring
+- Automated testing
+- Cloud Functions
+- BigQuery scheduled queries
+- Power BI Service refresh
+- Advanced DAX optimization
+
+---# 🚀 Roadmap
+
+The project demonstrates a complete end-to-end analytics workflow. Future enhancements will focus on scalability, automation, cloud engineering, and enterprise BI best practices.
+
+---
+
+## 📅 Planned Improvements
+
+### Data Engineering
+
+- [ ] Implement Incremental ETL Pipeline
+- [ ] Replace Full Refresh with MERGE Operations
+- [ ] Partition BigQuery Tables
+- [ ] Cluster High-Volume Tables
+- [ ] Add Data Validation Rules
+- [ ] Build Data Quality Dashboard
+- [ ] Create Automated Audit Tables
+
+---
+
+### Cloud & Automation
+
+- [ ] Schedule BigQuery Jobs
+- [ ] Automate Dataset Refresh
+- [ ] Deploy Cloud Functions
+- [ ] Implement CI/CD using GitHub Actions
+- [ ] Enable Automated Testing
+- [ ] Configure Alerting & Monitoring
+
+---
+
+### Power BI
+
+- [ ] Row-Level Security (RLS)
+- [ ] Incremental Refresh
+- [ ] Calculation Groups
+- [ ] Field Parameters
+- [ ] Dynamic Measure Selector
+- [ ] What-if Parameters
+- [ ] Mobile Layout Optimization
+
+---
+
+### Analytics
+
+- [ ] Customer Risk Segmentation
+- [ ] Credit Health Index
+- [ ] Predictive Credit Risk Model
+- [ ] Customer Lifetime Value
+- [ ] Customer Cohort Analysis
+- [ ] Portfolio Trend Analysis
+
+---
+
+# 🏆 Learning Outcomes
+
+This project demonstrates practical experience in:
+
+## Data Engineering
+
+- SQL Data Transformation
+- ETL Pipelines
+- Data Cleaning
+- Data Modeling
+- Star Schema Design
+- Data Warehousing
+
+---
+
+## Cloud Analytics
+
+- Google BigQuery
+- Google Drive API
+- Cloud Data Storage
+- SQL Optimization
+
+---
+
+## Business Intelligence
+
+- Microsoft Power BI
+- Power Query
+- DAX
+- Dashboard Design
+- Drill-through Reports
+- Interactive Tooltips
+- Executive Reporting
+
+---
+
+## Python
+
+- Data Loading
+- Automation
+- Exploratory Data Analysis
+- Data Profiling
+
+---
+
+## Business Analytics
+
+- KPI Design
+- Executive Dashboards
+- Credit Risk Analytics
+- Financial Analysis
+- Business Storytelling
+
+---
+
+# 📌 Repository Overview
+
+| Folder | Description |
+|----------|-------------|
+| **data/** | Raw source files and documentation |
+| **docs/** | EDA report and pipeline screenshots |
+| **notebooks/** | Data profiling notebooks |
+| **powerbi/** | PBIX dashboard and screenshots |
+| **sql/** | Data warehouse SQL scripts |
+| **financial.ipynb** | Data loading notebook |
+| **README.md** | Project documentation |
+
+---
+
+# ⭐ Why This Project?
+
+Unlike a traditional Power BI dashboard, this project covers the complete analytics lifecycle.
+
+✅ Automated Data Ingestion
+
+✅ Cloud Storage
+
+✅ Data Warehousing
+
+✅ SQL Data Transformation
+
+✅ Star Schema Modeling
+
+✅ Exploratory Data Analysis
+
+✅ Executive Dashboard
+
+✅ Business KPIs
+
+✅ Interactive Reporting
+
+✅ Production-style Documentation
+
+---
+
+# 📷 Project Preview
+
+| Component | Available |
+|-----------|:---------:|
+| Dashboard Screenshots | ✅ |
+| Power Query Images | ✅ |
+| Automation Screenshots | ✅ |
+| Architecture Diagram | ✅ |
+| Star Schema Diagram | ✅ |
+| Repository Structure | ✅ |
+| SQL Scripts | ✅ |
+| EDA Report | ✅ |
+| Power BI File | ✅ |
+
+---
+
+# 🤝 Contributing
+
+Contributions are welcome.
+
+If you would like to improve this project:
+
+1. Fork the repository
+2. Create a feature branch
+
+```bash
+git checkout -b feature/your-feature
+```
+
+3. Commit your changes
+
+```bash
+git commit -m "Add new feature"
+```
+
+4. Push to GitHub
+
+```bash
+git push origin feature/your-feature
+```
+
+5. Open a Pull Request
+
+---
+
+# 📜 License
+
+This repository is intended for educational, portfolio, and learning purposes.
+
+Please provide appropriate attribution if you reuse significant portions of the project.
+
+---
+
+# 👨‍💻 Author
+
+## Anumodit Shukla
+
+**Data Analyst | Data Engineer Enthusiast | Business Intelligence**
+
+- 🔗 GitHub: https://github.com/anumodit740
+- 💼 LinkedIn: https://linkedin.com/in/anumodit740
+- 📊 Live Power BI Report:
+  https://app.powerbi.com/groups/me/reports/feade1b7-637e-40bb-a4e0-32b5701f9470/tt01risksummary01?experience=power-bi
+
+---
+
+# 🙏 Acknowledgements
+
+Special thanks to the open-source tools and platforms that made this project possible.
+
+- Google BigQuery
+- Microsoft Power BI
+- Microsoft Power Automate
+- Microsoft Outlook
+- Google Drive
+- Google Colab
+- Python
+- pandas
+- ydata-profiling
+- GitHub
+
+---
 
 <div align="center">
 
-**If this project is useful, a ⭐ is appreciated.**
+# ⭐ If you found this project useful, consider giving it a Star!
+
+It helps others discover the project and motivates future improvements.
+
+<br>
 
 ![Stars](https://img.shields.io/github/stars/anumodit740/Financial-Credit-Risk-Analytics?style=social)
+
+![Forks](https://img.shields.io/github/forks/anumodit740/Financial-Credit-Risk-Analytics?style=social)
+
+![Issues](https://img.shields.io/github/issues/anumodit740/Financial-Credit-Risk-Analytics)
+
+![License](https://img.shields.io/badge/License-Educational-blue)
+
+---
+
+### Built with ❤️ using
+
+**Python • SQL • Google BigQuery • Power BI • Power Query • DAX • Power Automate**
+
+---
+
+### ⭐ Thank you for visiting this repository!
 
 </div>
