@@ -263,7 +263,7 @@ Stores analytical measures including:
 ---
 # 🖼️ Dashboard Gallery
 
-The Power BI report is designed for executive decision-making and consists of **11 interactive report pages**, including drill-through analysis, custom tooltip pages, and Power Query transformation views.
+The Power BI report is designed for executive decision-making and consists of **10 interactive report pages**, including drill-through analysis, custom tooltip pages, and Power Query transformation views.
 
 ## 📊 Dashboard Overview
 
@@ -896,7 +896,7 @@ docs/
 | Fact Tables | 1 |
 | Dimension Tables | 7 |
 | SQL Scripts | 9 |
-| Dashboard Pages | 11 |
+| Dashboard Pages | 10 |
 | Business KPIs | 30+ |
 | Drill-through Pages | 2 |
 | Tooltip Pages | 1 |
