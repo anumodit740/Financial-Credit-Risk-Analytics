@@ -96,7 +96,7 @@ The pipeline performs:
 | 📧 Automated Data Ingestion | Outlook → Power Automate → Google Drive |
 | ☁ Cloud Data Warehouse | Google BigQuery |
 | ⭐ Data Warehouse Design | 7 Dimension + 1 Fact Star Schema |
-| 📊 Business Intelligence | 11 Interactive Power BI Pages |
+| 📊 Business Intelligence | 10 Interactive Power BI Pages |
 | 📈 Executive Reporting | 30+ Credit Risk KPIs |
 | 🧹 Data Cleaning | SQL Transformation Pipeline |
 | 🐍 Python Automation | Google API + EDA |
